@@ -10,5 +10,7 @@ def aggregateData(aimageArray, alabelledParticles):
     for iparticle in range(mparticle):
         coloData[iparticle] = np.average(aimageArray[alabelledParticles == iparticle])
         sizeData[iparticle] = np.count_nonzero(aimageArray[alabelledParticles == iparticle])
+    coloData[np.isnan(coloData)] = 0
+    sizeData[np.isnan(sizeData)] = 0
 
     return coloData, sizeData
