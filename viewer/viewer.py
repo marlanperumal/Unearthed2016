@@ -27,12 +27,11 @@ def createWhiteArray(imgArray, labFeat):
         whiteArr[labFeat == i] = [1,1,1]
     return whiteArr
 
-def setFeatColor(imgArray,labFeat,featVect,color):
-
-    colorArray = np.zeros((imgArray.shape[0], imgArray.shape[1], 3))
 
 def binSizeData(sizeData):
     print(sizeData)
+
+
 
 
 def view(imgArray, labFeat, colorData, sizeData):
