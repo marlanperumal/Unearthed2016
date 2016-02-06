@@ -19,9 +19,9 @@ def addFigToAx(aax,afig):
     aax.imshow(afig, cmap=plt.cm.gray)
 
 def view(imgArray, labFeat, colorData, sizeData):
-    pass
+    addFigToAx(ax1, imgArray)
+    addFigToAx(ax2, truth)
 
-addFigToAx(ax1, image)
-addFigToAx(ax2, truth)
+
 
 plt.show()
