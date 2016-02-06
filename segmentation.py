@@ -23,12 +23,6 @@ def process_image(image):
     filtered_image = np.zeros_like(image,dtype=np.uint8) # set up all-zero image
     filtered_image[image > thresh] = 1 # filtered values set to 1
 
-    # # label truth features
-    # labeled_particles, num_features = ndi.label(truth2)
-    #
-    # # label features and convert to rgb image
-    # labeled_particles, num_features = ndi.label(filtered_image)
-    # image_label_overlay = label2rgb(labeled_particles, bg_label=0)
     distance = ndi.distance_transform_edt(filtered_image)
     local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(7),
                             labels=filtered_image, exclude_border=False)

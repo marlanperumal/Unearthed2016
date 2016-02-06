@@ -6,7 +6,7 @@ import skimage.io
 
 class viewerClass:
 
-    numBins = 10
+    numBins = 20
 
     # Setting up layout
     ax1 = plt.subplot2grid((4,4), (0,0), colspan=4)
@@ -28,8 +28,8 @@ class viewerClass:
 
     def view(self):
 
-        self.n1, self.binsSize, self.patches1 = self.ax3.hist(self.sizeData[1:], 50, facecolor='green', alpha=0.75,picker=5)
-        self.n2, self.binsColour, self.patches2 = self.ax4.hist(self.colorData[1:], 50, facecolor='green', alpha=0.75,picker=5)
+        self.n1, self.binsSize, self.patches1 = self.ax3.hist(self.sizeData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
+        self.n2, self.binsColour, self.patches2 = self.ax4.hist(self.colorData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)

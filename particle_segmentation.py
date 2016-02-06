@@ -26,6 +26,7 @@ def apply_watershed(image, feature_num, tot_features):
     local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(template_size),
                                 labels=feature_mask)
     markers = ndi.label(local_maxi)[0]
+    # labels = morphology.watershed(-distance, markers, mask=feature_mask)
     labels = morphology.watershed(-distance, markers, mask=feature_mask)
     # plt.imshow(markers, cmap=plt.cm.gray, interpolation="nearest")
     # plt.show()
@@ -78,23 +79,21 @@ labeled_particles, num_features = ndi.label(filtered_image)
 
 image_label_overlay = label2rgb(labeled_particles, bg_label=0)
 # clear_border(filtered_image)
-filtered_image[0,:] = 0
-filtered_image[-1,:] = 0
-filtered_image[:,0] = 0
-filtered_image[:,-1] = 0
 
 new_image = image.copy()
 new_image[labeled_particles == 0] = 0
 # distance = ndi.distance_transform_edt(sobel(new_image))
 distance = ndi.distance_transform_edt(filtered_image)
 # distance[distance > 0.7*np.max(distance)] = 0.7*np.max(distance)
-local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(7),
+local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(5),
                             labels=filtered_image, exclude_border=False)
 markers = ndi.label(local_maxi)[0]
 # plt.imshow(distance, cmap=plt.cm.gray, interpolation="nearest")
 # plt.show()
 
-labels = morphology.watershed(-distance, markers, mask=filtered_image)
+# labels = morphology.watershed(-distance, markers, mask=filtered_image)
+closed_elevation = ndi.grey_closing(sobel(new_image),size=4)
+labels = morphology.watershed(closed_elevation, markers)
 image_label_overlay3 = label2rgb(labels, bg_label=0)
 image_label_overlay3[find_boundaries(labels)] = [0,0,0]
 
@@ -111,7 +110,7 @@ image_label_overlay2 = label2rgb(labeled_particles2, bg_label=0)
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(30, 10), sharex=True, sharey=True)
 
 # original image
-ax1.imshow(image, cmap=plt.cm.gray)
+ax1.imshow(closed_elevation, cmap=plt.cm.gray)
 ax1.axis("off")
 
 # edges
