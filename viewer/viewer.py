@@ -39,11 +39,21 @@ def getBinRange(bin,binNum):
 
 def view(imgArray, labFeat, colorData, sizeData):
 
-    n1, bins1, patches1 = ax3.hist(sizeData[1:], 50, facecolor='green', alpha=0.75)
-    n2, bins2, patches2 = ax4.hist(colorData[1:], 50, facecolor='green', alpha=0.75)
+    n1, binsSize, patches1 = ax3.hist(sizeData[1:], 50, facecolor='green', alpha=0.75)
+    n2, binsColour, patches2 = ax4.hist(colorData[1:], 50, facecolor='green', alpha=0.75)
     addFigToAx(ax1, imgArray)
-    addFigToAx(ax2, createWhiteArray(imgArray, labFeat))
+    colourArray = createWhiteArray(imgArray, labFeat)
+    colourRange = getBinRange(binsSize, 18)
+    colourArray = createColourArray(sizeData, labFeat, colourArray, colourRange)
+    addFigToAx(ax2, colourArray)
     plt.show()
+
+def createColourArray(adataArray, alabFeat, aimgArray, arange):
+    mparticle = np.max(alabFeat)
+    for ifeat in range(mparticle): # Don't look at 0 as that is the background.
+        if(adataArray[ifeat] >= arange[0] and adataArray[ifeat] < arange[1]):
+            aimgArray[alabFeat == ifeat] = [0,1,0]
+    return aimgArray
 
 
 
