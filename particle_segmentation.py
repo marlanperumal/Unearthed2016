@@ -6,15 +6,20 @@ from skimage import morphology
 from skimage.color import label2rgb
 from skimage.segmentation import felzenszwalb
 import skimage.io
+import skimage.color
 
 # load images
 image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
 truth = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/truth1.png")
 
+# trim borders
+border_width = 50
+image = image[:, border_width:-border_width]
+truth = truth[:, border_width:-border_width]
+
 # perform canny edge detection on image. Scale to max pixel value first
 max_pixel_value = np.max(image)
-print("Max Pixel Value:",max_pixel_value)
-edges = canny(image/float(max_pixel_value))
+edges = canny(image/float(max_pixel_value), sigma=1.0)
 
 # do simple filter based on color value
 thresh = 0.1*max_pixel_value
@@ -63,4 +68,3 @@ print("Truth Features", num_features2)
 # markers[image < 30] = 1
 # markers[image > 8000] = 2
 
-# felz = felzenszwalb(image, scale=0.01, sigma=1, min_size=20)
