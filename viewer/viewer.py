@@ -6,7 +6,7 @@ import skimage.io
 
 class viewerClass:
 
-    numBins = 10
+    numBins = 20
 
     # Setting up layout
     ax1 = plt.subplot2grid((4,4), (0,0), colspan=4)

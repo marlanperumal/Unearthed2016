@@ -28,7 +28,11 @@ def process_image(image):
                             labels=filtered_image, exclude_border=False)
     markers = ndi.label(local_maxi)[0]
     labels = morphology.watershed(-distance, markers, mask=filtered_image)
+    backup_labels = labels.copy()
     labels[find_boundaries(labels)] = 0
+    for i in np.unique(backup_labels)[1:]:
+        if np.count_nonzero(labels[backup_labels == i]) == 0:
+            labels[backup_labels == i] = i
 
     return image, labels
 
