@@ -18,6 +18,8 @@ ax4 = plt.subplot2grid((4,4), (2, 2), colspan=2,rowspan=2)
 def addFigToAx(aax,afig):
     aax.imshow(afig, cmap=plt.cm.gray)
 
+def view(imgArray, labFeat, colorData, sizeData):
+    pass
 
 addFigToAx(ax1, image)
 addFigToAx(ax2, truth)
