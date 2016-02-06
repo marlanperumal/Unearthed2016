@@ -31,13 +31,16 @@ def createWhiteArray(imgArray, labFeat):
 def binSizeData(sizeData):
     print(sizeData)
 
-
-
+def getBinRange(bin,binNum):
+    binRange = []
+    binRange.append(bin[binNum])
+    binRange.append(bin[binNum+1])
+    return binRange
 
 def view(imgArray, labFeat, colorData, sizeData):
 
-    n, bins, patches = ax3.hist(sizeData[1:], 50, facecolor='green', alpha=0.75)
-    n, bins, patches = ax4.hist(colorData[1:], 50, facecolor='green', alpha=0.75)
+    n1, bins1, patches1 = ax3.hist(sizeData[1:], 50, facecolor='green', alpha=0.75)
+    n2, bins2, patches2 = ax4.hist(colorData[1:], 50, facecolor='green', alpha=0.75)
     addFigToAx(ax1, imgArray)
     addFigToAx(ax2, createWhiteArray(imgArray, labFeat))
     plt.show()
