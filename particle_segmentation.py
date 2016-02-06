@@ -9,11 +9,38 @@ from skimage.color import label2rgb
 import skimage.io
 import skimage.color
 from skimage.exposure import rescale_intensity
+import time
 from skimage.segmentation import find_boundaries
 
+def apply_watershed(image, feature_num, tot_features):
+    # print(image)
+    feature_mask = np.zeros((image.shape[0]+6,image.shape[1]+6))
+    feature_mask[3:-3,3:-3][image == feature_num] = 1
+    distance = ndi.distance_transform_edt(feature_mask)
+    # distance[distance > 0.7*np.max(distance)] = 0.7*np.max(distance)
+    template_size = 5
+    # if np.sum(feature_mask) < 100:
+    #     template_size = 3
+    # else:
+    #     template_size = 5
+    local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(template_size),
+                                labels=feature_mask)
+    markers = ndi.label(local_maxi)[0]
+    labels = morphology.watershed(-distance, markers, mask=feature_mask)
+    # plt.imshow(markers, cmap=plt.cm.gray, interpolation="nearest")
+    # plt.show()
+    # image[labels[1:-1,1:-1] == 1] = feature_num
+
+    for i in np.unique(labels)[2:]:
+        tot_features = tot_features + 1
+        image[labels[3:-3,3:-3] == i] = tot_features
+    return tot_features
+
+tic = time.clock()
 # load images
-image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
-truth = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/truth1.png")
+
+image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original3.png")
+truth = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/truth3.png")
 
 # trim borders
 border_width = 50
@@ -25,6 +52,9 @@ image = rescale_intensity(1.0*image, in_range=(p2, p98))
 
 # image = image[10:70,55:110]
 # truth = truth[10:70,55:110]
+
+# image = image[0:30,370:430]
+# truth = truth[0:30,370:430]
 
 # perform canny edge detection on image. Scale to max pixel value first
 max_pixel_value = np.max(image)
@@ -40,17 +70,30 @@ distance = ndi.distance_transform_edt(filtered_image)
 
 # label features and convert to rgb image
 labeled_particles, num_features = ndi.label(filtered_image)
+# labeled_slices = ndi.find_objects(labeled_particles)
+#
+# tot_features = num_features
+# for i in range(num_features):
+#     tot_features = apply_watershed(labeled_particles[labeled_slices[i]],i+1, tot_features)
+
 image_label_overlay = label2rgb(labeled_particles, bg_label=0)
 # clear_border(filtered_image)
 filtered_image[0,:] = 0
 filtered_image[-1,:] = 0
 filtered_image[:,0] = 0
 filtered_image[:,-1] = 0
+
+new_image = image.copy()
+new_image[labeled_particles == 0] = 0
+# distance = ndi.distance_transform_edt(sobel(new_image))
 distance = ndi.distance_transform_edt(filtered_image)
 # distance[distance > 0.7*np.max(distance)] = 0.7*np.max(distance)
-local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(5),
-                            labels=filtered_image)
+local_maxi = peak_local_max(distance, indices=False, footprint=morphology.square(7),
+                            labels=filtered_image, exclude_border=False)
 markers = ndi.label(local_maxi)[0]
+# plt.imshow(distance, cmap=plt.cm.gray, interpolation="nearest")
+# plt.show()
+
 labels = morphology.watershed(-distance, markers, mask=filtered_image)
 image_label_overlay3 = label2rgb(labels, bg_label=0)
 image_label_overlay3[find_boundaries(labels)] = [0,0,0]
@@ -75,6 +118,9 @@ ax1.axis("off")
 ax2.imshow(image_label_overlay)
 ax2.axis("off")
 
+new_image = image.copy()
+new_image[labeled_particles == 0] = 0
+
 # image features
 ax3.imshow(image_label_overlay3)
 ax3.axis("off")
@@ -82,10 +128,12 @@ ax3.axis("off")
 # truth features
 ax4.imshow(image_label_overlay2)
 ax4.axis("off")
-
+toc = time.clock()
+print(toc-tic)
 plt.show()
 print("Found Features", num_features)
 print("Found Features Watershed", len(np.unique(labels)))
 print("Truth Features", num_features2)
+
 
 
