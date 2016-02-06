@@ -7,4 +7,6 @@ image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Chall
 
 image, labelledFeat = process_image(image)
 colorData, sizeData = aggregateData(image,labelledFeat)
-viewer.view(image, labelledFeat, colorData, sizeData)
+
+view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
+view.view()
