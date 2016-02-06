@@ -10,9 +10,9 @@ image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Chall
 image, labelledFeat = process_image(image)
 colorData, sizeData = aggregateData(image,labelledFeat)
 
-fig, ax = plt.subplots(1,1)
-ax.imshow(labelledFeat, cmap=plt.cm.gray)
-plt.show()
+# fig, ax = plt.subplots(1,1)
+# ax.imshow(labelledFeat, cmap=plt.cm.gray)
+# plt.show()
 
-# view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
-# view.view()
+view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
+view.view()
