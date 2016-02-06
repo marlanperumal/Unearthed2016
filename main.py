@@ -1,5 +1,6 @@
 from viewer import viewer
 import skimage.io
 
-image = skimage.io.imread("../Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
+image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
 
+viewer.view(image, image, None, None)

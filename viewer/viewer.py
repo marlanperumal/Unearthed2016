@@ -1,9 +1,6 @@
 import matplotlib.pyplot as plt
 import skimage.io
 
-# Dummy image for now
-image = skimage.io.imread("../Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
-truth = skimage.io.imread("../Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/truth1.png")
 
 # Setting up layout
 ax1 = plt.subplot2grid((4,4), (0,0), colspan=4)
@@ -19,9 +16,11 @@ def addFigToAx(aax,afig):
     aax.imshow(afig, cmap=plt.cm.gray)
 
 def view(imgArray, labFeat, colorData, sizeData):
+
     addFigToAx(ax1, imgArray)
-    addFigToAx(ax2, truth)
+    addFigToAx(ax2, labFeat)
+    plt.show()
 
 
 
-plt.show()
+
