@@ -6,5 +6,5 @@ import skimage.io
 image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/ParticleSegmentationImages/original1.png")
 
 image, labelledFeat = process_image(image)
-colorData,SizeData = aggregateData(image,labelledFeat)
-viewer.view(image, labelledFeat, colorData, SizeData)
+colorData, sizeData = aggregateData(image,labelledFeat)
+viewer.view(image, labelledFeat, colorData, sizeData)
