@@ -1,6 +1,6 @@
 from viewer import viewer
 from aggregate import aggregateData
-from segmentation import process_image
+from segmentation import process_image, trim_borders
 import skimage.io
 import matplotlib.pyplot as plt
 import numpy as np
@@ -11,6 +11,7 @@ for file in os.listdir(DIR):
         FILEPATH = DIR+"/"+file
         print(FILEPATH)
         image = skimage.io.imread(FILEPATH)
+        image = trim_borders(image,200)
         image, labelledFeat = process_image(image)
         colorData, sizeData = aggregateData(image,labelledFeat)
         view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
