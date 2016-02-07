@@ -93,7 +93,7 @@ markers = ndi.label(local_maxi)[0]
 
 # labels = morphology.watershed(-distance, markers, mask=filtered_image)
 closed_elevation = ndi.grey_closing(sobel(new_image),size=4)
-labels = morphology.watershed(closed_elevation, markers)
+labels = morphology.watershed(-distance, markers)
 image_label_overlay3 = label2rgb(labels, bg_label=0)
 image_label_overlay3[find_boundaries(labels)] = [0,0,0]
 
@@ -116,9 +116,6 @@ ax1.axis("off")
 # edges
 ax2.imshow(image_label_overlay)
 ax2.axis("off")
-
-new_image = image.copy()
-new_image[labeled_particles == 0] = 0
 
 # image features
 ax3.imshow(image_label_overlay3)

@@ -2,7 +2,7 @@ import numpy as np
 def aggregateData(aimageArray, alabelledParticles):
 
     # Work out number of particles and size data containers
-    mparticle = np.max(alabelledParticles)
+    mparticle = np.max(np.unique(alabelledParticles))
     coloData = np.zeros(mparticle)
     sizeData = np.zeros(mparticle)
 
