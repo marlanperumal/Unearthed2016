@@ -84,7 +84,7 @@ class viewerClass:
             else:
                 self.changeSizeImg(bin)
                 self.lastSizeSelect = event.artist.xy[0]
-                plt.setp(self.patches2[bin], color="r")
+                plt.setp(self.patches1[bin], color="r")
                 self.ax3.figure.canvas.draw()
         elif(event.mouseevent.inaxes == self.ax4):
             bin = self.findBinIndex(event.artist.xy[0],self.binsColour)
