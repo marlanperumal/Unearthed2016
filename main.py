@@ -17,7 +17,7 @@ for file in os.listdir(DIR):
         image, labelledFeat = process_image(image)
         colorData, sizeData = aggregateData(image,labelledFeat)
         view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
-        view.view(selectSize=True, sizeValue=200, acont=True)
+        view.view(selectSize=True, sizeValue=200)
 
 
 image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/Originals/original1.png")
@@ -25,6 +25,6 @@ image = trim_borders(image,150)
 image, labelledFeat = process_image(image)
 colorData, sizeData = aggregateData(image,labelledFeat)
 view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
-view.view(selectSize=True, sizeValue=200,acont=False)
+view.view(selectSize=True, sizeValue=200)
 view.show()
 

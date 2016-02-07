@@ -33,14 +33,13 @@ class viewerClass:
         plt.setp(self.patches2[binNum], color="r")
         self.ax4.figure.canvas.draw()
 
-    def view(self,selectColor = False,selectSize = False, sizeValue = 0.0,colorValue = 0.0 ,acont = False):
+    def view(self,selectColor = False,selectSize = False, sizeValue = 0.0,colorValue = 0.0):
         self.initView()
         self.n1, self.binsSize, self.patches1 = self.ax3.hist(self.sizeData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
         self.n2, self.binsColour, self.patches2 = self.ax4.hist(self.colorData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)
-        self.cont = acont
 
         if(selectColor):
             self.setColorSelect(colorValue)
