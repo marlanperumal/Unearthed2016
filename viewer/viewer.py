@@ -19,6 +19,8 @@ class viewerClass:
         self.labFeat = labFeat
         self.colorData = colorData
         self.sizeData = sizeData
+        self.isColor = []
+        self.isSize = []
 
     def view(self):
         self.initView()
@@ -27,7 +29,6 @@ class viewerClass:
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)
-        plt.tight_layout()
         mng = plt.get_current_fig_manager()
         mng.resize(*mng.window.maxsize())
         plt.show()
@@ -44,6 +45,7 @@ class viewerClass:
         self.ax3.set_title('Size Histogram')
         self.ax4 = plt.subplot2grid((4,4), (2, 2), colspan=2,rowspan=2)
         self.ax4.set_title('Color Intensity Histogram')
+        plt.subplots_adjust(left=0.05, bottom=0.06, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
     def addFigToAx(self, aax,afig, cmap=plt.cm.gray):
         aax.imshow(afig, cmap=cmap)
@@ -84,7 +86,7 @@ class viewerClass:
             else:
                 self.changeSizeImg(bin)
                 self.lastSizeSelect = event.artist.xy[0]
-                plt.setp(self.patches2[bin], color="r")
+                plt.setp(self.patches1[bin], color="r")
                 self.ax3.figure.canvas.draw()
         elif(event.mouseevent.inaxes == self.ax4):
             bin = self.findBinIndex(event.artist.xy[0],self.binsColour)
