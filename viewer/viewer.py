@@ -6,11 +6,14 @@ import skimage.io
 
 class viewerClass:
 
-    numBins = 10
+    numBins = 20
+    lastSizeSelect = None
+    lastColorSelect = None
 
     # Setting up layout
     ax1 = plt.subplot2grid((4,4), (0,0), colspan=4)
     ax1.axis("off")
+    # plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
     ax1.set_title('Original')
     ax2 = plt.subplot2grid((4,4), (1,0), colspan=4)
     ax2.axis("off")
@@ -32,11 +35,11 @@ class viewerClass:
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)
+        plt.tight_layout()
         plt.show()
 
     def addFigToAx(self, aax,afig, cmap=plt.cm.gray):
         aax.imshow(afig, cmap=cmap)
-
 
     def createWhiteArray(self,imgArray, labFeat):
         whiteArr = np.zeros((imgArray.shape[0], imgArray.shape[1], 3))
@@ -44,13 +47,11 @@ class viewerClass:
             whiteArr[labFeat == i] = [1,1,1]
         return whiteArr
 
-
     def getBinRange(self, bin, binNum):
         binRange = []
         binRange.append(bin[binNum])
         binRange.append(bin[binNum+1])
         return binRange
-
 
     def createColourArray(self, adataArray, alabFeat, aimgArray, arange):
         mparticle = np.max(alabFeat)
@@ -64,10 +65,30 @@ class viewerClass:
 
         if(event.mouseevent.inaxes == self.ax3):
             bin = self.findBinIndex(event.artist.xy[0],self.binsSize)
-            self.changeSizeImg(bin)
+            if(event.artist.xy[0] == self.lastSizeSelect):
+                self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
+                self.ax2.figure.canvas.draw()
+                self.lastSizeSelect = None
+                plt.setp(self.patches1[bin], color="g")
+                self.ax3.figure.canvas.draw()
+            else:
+                self.changeSizeImg(bin)
+                self.lastSizeSelect = event.artist.xy[0]
+                plt.setp(self.patches2[bin], color="r")
+                self.ax3.figure.canvas.draw()
         elif(event.mouseevent.inaxes == self.ax4):
             bin = self.findBinIndex(event.artist.xy[0],self.binsColour)
-            self.changeColorImg(bin)
+            if(event.artist.xy[0] == self.lastColorSelect):
+                self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
+                self.ax2.figure.canvas.draw()
+                self.lastColorSelect = None
+                plt.setp(self.patches2[bin], color="g")
+                self.ax3.figure.canvas.draw()
+            else:
+                self.changeColorImg(bin)
+                self.lastColorSelect = event.artist.xy[0]
+                plt.setp(self.patches2[bin], color="r")
+                self.ax3.figure.canvas.draw()
 
     def changeSizeImg(self, bin):
         whiteArr = self.createWhiteArray(self.imgArray, self.labFeat)
@@ -97,3 +118,5 @@ class viewerClass:
                 return i
             else:
                 i = i + 1
+
+
