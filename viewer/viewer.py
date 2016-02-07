@@ -13,7 +13,7 @@ class viewerClass:
     lastSizeSelect = None
     lastColorSelect = None
 
-    def __init__(self,imgArray, labFeat, colorData, sizeData, procTime, featTime):
+    def __init__(self,imgArray, labFeat, colorData, sizeData, procTime, featTime, truthFeatures):
         self.imgArray = imgArray
         self.labFeat = labFeat
         self.colorData = colorData
@@ -22,6 +22,7 @@ class viewerClass:
         self.featTime = featTime
         self.isColor = []
         self.isSize = []
+        self.truthFeat = truthFeatures
 
     def setSizeSelect(self,size):
         binNum = self.whichBin(self.binsSize, size)
@@ -67,7 +68,9 @@ class viewerClass:
         self.ax5.axis('off')
         self.ax5.text(-0.05, 0.95, 'Process Time: ' + str(self.procTime) + 's', fontsize=15, weight='bold')
         self.ax5.text(-0.05, 0.80, 'Feature Time: ' + str(self.featTime) + 's', fontsize=15, weight='bold')
-        self.ax5.text(-0.05, 0.65, 'Process Time: ', fontsize=15, weight='bold')
+        self.ax5.text(-0.05, 0.65, 'No. Particles Found: ' + str(len(np.unique(self.labFeat))), fontsize=15, weight='bold')
+        self.ax5.text(-0.05, 0.5, 'No. Particles Truth: ' + str(self.truthFeat), fontsize=15, weight='bold')
+
         self.ax4 = plt.subplot2grid((4,5), (2, 3), colspan=2,rowspan=2)
         self.ax4.set_title('Color Intensity Histogram')
 
