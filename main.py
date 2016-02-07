@@ -16,15 +16,15 @@ for file in os.listdir(DIR):
         image = trim_borders(image,150)
         image, labelledFeat, procTime = process_image(image)
         colorData, sizeData, featTime = aggregateData(image,labelledFeat)
-        view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
-        view.view(selectSize=True, sizeValue=200)
+        view = viewer.viewerClass(image, labelledFeat, colorData, sizeData, procTime, featTime)
+        view.view(selectSize=True, sizeValue=80)
 
 
 image = skimage.io.imread("Data/Unearthed Cape Town/De Beers Particle Size Challenge/Originals/original1.png")
-image = trim_borders(image,150)
+image = trim_borders(image, 150)
 image, labelledFeat, procTime = process_image(image)
 colorData, sizeData, featTime = aggregateData(image,labelledFeat)
-view = viewer.viewerClass(image, labelledFeat, colorData, sizeData)
-view.view(selectSize=True, sizeValue=200)
+view = viewer.viewerClass(image, labelledFeat, colorData, sizeData, procTime, featTime)
+view.view(selectSize=True, sizeValue=80)
 view.show()
 

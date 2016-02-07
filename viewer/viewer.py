@@ -13,11 +13,13 @@ class viewerClass:
     lastSizeSelect = None
     lastColorSelect = None
 
-    def __init__(self,imgArray, labFeat, colorData, sizeData):
+    def __init__(self,imgArray, labFeat, colorData, sizeData, procTime, featTime):
         self.imgArray = imgArray
         self.labFeat = labFeat
         self.colorData = colorData
         self.sizeData = sizeData
+        self.procTime = procTime
+        self.featTime = featTime
         self.isColor = []
         self.isSize = []
 
@@ -53,16 +55,22 @@ class viewerClass:
 
     def initView(self):
             # Setting up layout
-        self.ax1 = plt.subplot2grid((4,4), (0,0), colspan=4)
+        self.ax1 = plt.subplot2grid((4,5), (0,0), colspan=5)
         self.ax1.axis("off")
         self.ax1.set_title('Original')
-        self.ax2 = plt.subplot2grid((4,4), (1,0), colspan=4)
+        self.ax2 = plt.subplot2grid((4,5), (1,0), colspan=5)
         self.ax2.axis("off")
         self.ax2.set_title('Processed')
-        self.ax3 = plt.subplot2grid((4,4), (2, 0), colspan=2,rowspan=2)
+        self.ax3 = plt.subplot2grid((4,5), (2, 0), colspan=2,rowspan=2)
         self.ax3.set_title('Size Histogram')
-        self.ax4 = plt.subplot2grid((4,4), (2, 2), colspan=2,rowspan=2)
+        self.ax5 = plt.subplot2grid((4,5), (2, 2), colspan=1,rowspan=2)
+        self.ax5.axis('off')
+        self.ax5.text(-0.05, 0.95, 'Process Time: ' + str(self.procTime) + 's', fontsize=15, weight='bold')
+        self.ax5.text(-0.05, 0.80, 'Feature Time: ' + str(self.featTime) + 's', fontsize=15, weight='bold')
+        self.ax5.text(-0.05, 0.65, 'Process Time: ', fontsize=15, weight='bold')
+        self.ax4 = plt.subplot2grid((4,5), (2, 3), colspan=2,rowspan=2)
         self.ax4.set_title('Color Intensity Histogram')
+
         plt.subplots_adjust(left=0.05, bottom=0.06, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
     def addFigToAx(self, aax,afig, cmap=plt.cm.gray):
