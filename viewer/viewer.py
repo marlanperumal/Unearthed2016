@@ -4,7 +4,8 @@ import skimage.io
 from time import sleep
 from scipy import eye
 
-
+mng = plt.get_current_fig_manager()
+mng.resize(*mng.window.maxsize())
 
 class viewerClass:
 
@@ -46,8 +47,6 @@ class viewerClass:
         if(selectSize):
             self.setSizeSelect(sizeValue)
 
-        mng = plt.get_current_fig_manager()
-        mng.resize(*mng.window.maxsize())
         plt.show(block=False)
 
     def show(self):
