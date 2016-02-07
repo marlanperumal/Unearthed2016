@@ -13,7 +13,6 @@ class viewerClass:
     lastSizeSelect = None
     lastColorSelect = None
 
-
     def __init__(self,imgArray, labFeat, colorData, sizeData):
         self.imgArray = imgArray
         self.labFeat = labFeat
