@@ -64,8 +64,8 @@ class viewerClass:
 
 
     def createColourArray(self, adataArray, alabFeat, aimgArray, arange):
-        mparticle = np.max(alabFeat)
-        for ifeat in range(mparticle): # Don't look at 0 as that is the background.
+        mparticle = np.max(np.unique(alabFeat))
+        for ifeat in np.unique(labFeat)[1:]: # Don't look at 0 as that is the background.
             if(adataArray[ifeat] >= arange[0] and adataArray[ifeat] < arange[1]):
                 aimgArray[alabFeat == ifeat] = [1.,0,0]
         return aimgArray
