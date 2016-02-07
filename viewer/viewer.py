@@ -7,7 +7,11 @@ from scipy import eye
 
 
 class viewerClass:
-    numBins = 10
+
+    numBins = 20
+    lastSizeSelect = None
+    lastColorSelect = None
+
 
 
     def __init__(self,imgArray, labFeat, colorData, sizeData):
@@ -16,7 +20,6 @@ class viewerClass:
         self.colorData = colorData
         self.sizeData = sizeData
 
-
     def view(self):
         self.initView()
         self.n1, self.binsSize, self.patches1 = self.ax3.hist(self.sizeData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
@@ -24,6 +27,7 @@ class viewerClass:
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)
+        plt.tight_layout()
         mng = plt.get_current_fig_manager()
         mng.resize(*mng.window.maxsize())
         plt.show()
@@ -71,10 +75,30 @@ class viewerClass:
 
         if(event.mouseevent.inaxes == self.ax3):
             bin = self.findBinIndex(event.artist.xy[0],self.binsSize)
-            self.changeSizeImg(bin)
+            if(event.artist.xy[0] == self.lastSizeSelect):
+                self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
+                self.ax2.figure.canvas.draw()
+                self.lastSizeSelect = None
+                plt.setp(self.patches1[bin], color="g")
+                self.ax3.figure.canvas.draw()
+            else:
+                self.changeSizeImg(bin)
+                self.lastSizeSelect = event.artist.xy[0]
+                plt.setp(self.patches2[bin], color="r")
+                self.ax3.figure.canvas.draw()
         elif(event.mouseevent.inaxes == self.ax4):
             bin = self.findBinIndex(event.artist.xy[0],self.binsColour)
-            self.changeColorImg(bin)
+            if(event.artist.xy[0] == self.lastColorSelect):
+                self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
+                self.ax2.figure.canvas.draw()
+                self.lastColorSelect = None
+                plt.setp(self.patches2[bin], color="g")
+                self.ax3.figure.canvas.draw()
+            else:
+                self.changeColorImg(bin)
+                self.lastColorSelect = event.artist.xy[0]
+                plt.setp(self.patches2[bin], color="r")
+                self.ax3.figure.canvas.draw()
 
     def changeSizeImg(self, bin):
         whiteArr = self.createWhiteArray(self.imgArray, self.labFeat)
