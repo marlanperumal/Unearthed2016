@@ -4,7 +4,8 @@ import skimage.io
 from time import sleep
 from scipy import eye
 
-
+mng = plt.get_current_fig_manager()
+mng.resize(*mng.window.maxsize())
 
 class viewerClass:
 
@@ -13,23 +14,42 @@ class viewerClass:
     lastColorSelect = None
 
 
-
     def __init__(self,imgArray, labFeat, colorData, sizeData):
         self.imgArray = imgArray
         self.labFeat = labFeat
         self.colorData = colorData
         self.sizeData = sizeData
+        self.isColor = []
+        self.isSize = []
 
-    def view(self):
+    def setSizeSelect(self,size):
+        binNum = self.whichBin(self.binsSize, size)
+        self.changeSizeImg(binNum)
+        plt.setp(self.patches1[binNum], color="r")
+        self.ax3.figure.canvas.draw()
+
+    def setColorSelect(self,inten):
+        binNum = self.whichBin(self.binsSize, inten)
+        self.changeColorImg(binNum)
+        plt.setp(self.patches2[binNum], color="r")
+        self.ax4.figure.canvas.draw()
+
+    def view(self,selectColor = False,selectSize = False, sizeValue = 0.0,colorValue = 0.0):
         self.initView()
         self.n1, self.binsSize, self.patches1 = self.ax3.hist(self.sizeData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
         self.n2, self.binsColour, self.patches2 = self.ax4.hist(self.colorData[1:], self.numBins, facecolor='green', alpha=0.75,picker=5)
         self.addFigToAx(self.ax1, self.imgArray)
         self.addFigToAx(self.ax2, self.createWhiteArray(self.imgArray, self.labFeat))
         self.ax3.figure.canvas.mpl_connect('pick_event', self.pick)
-        plt.tight_layout()
-        mng = plt.get_current_fig_manager()
-        mng.resize(*mng.window.maxsize())
+
+        if(selectColor):
+            self.setColorSelect(colorValue)
+        if(selectSize):
+            self.setSizeSelect(sizeValue)
+
+        plt.show(block=False)
+
+    def show(self):
         plt.show()
 
     def initView(self):
@@ -44,6 +64,7 @@ class viewerClass:
         self.ax3.set_title('Size Histogram')
         self.ax4 = plt.subplot2grid((4,4), (2, 2), colspan=2,rowspan=2)
         self.ax4.set_title('Color Intensity Histogram')
+        plt.subplots_adjust(left=0.05, bottom=0.06, right=0.95, top=0.95, wspace=0.2, hspace=0.2)
 
     def addFigToAx(self, aax,afig, cmap=plt.cm.gray):
         aax.imshow(afig, cmap=cmap)
@@ -55,6 +76,12 @@ class viewerClass:
             whiteArr[labFeat == i] = [1,1,1]
         return whiteArr
 
+    # Determines which bin the number is within
+    def whichBin(self,bin,anum):
+        for i in range(len(bin)):
+            binBounds = self.getBinRange(bin,i)
+            if(anum >= binBounds[0]  and  anum < binBounds[1]):
+                return i
 
     def getBinRange(self, bin, binNum):
         binRange = []
